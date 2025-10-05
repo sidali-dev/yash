@@ -73,4 +73,9 @@ class HelperFunctions {
   static bool isRtl() {
     return Intl.getCurrentLocale() == 'ar';
   }
+
+  static bool isName(String s) {
+    final regex = RegExp(r"^[\p{L}]+([ '-][\p{L}]+)*$", unicode: true);
+    return !regex.hasMatch(s);
+  }
 }

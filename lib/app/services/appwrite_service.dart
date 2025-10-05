@@ -62,6 +62,43 @@ class AppwriteService {
     }
   }
 
+  Future<String> createAccount({
+    required String email,
+    required String password,
+    required String name,
+  }) async {
+    try {
+      final user = await _account.create(
+        userId: ID.unique(),
+        email: email,
+        password: password,
+        name: name,
+      );
+      return user.$id;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<String> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final session = await _account.createEmailPasswordSession(
+        email: email,
+        password: password,
+      );
+      _currentUser = await _account.get();
+
+      //Should add a step to check if the user is email verified
+      _status = AuthStatus.authenticated;
+      return session.userId;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<User> loginWithGoogle() async {
     try {
       await _account.createOAuth2Session(provider: OAuthProvider.google);
@@ -80,7 +117,7 @@ class AppwriteService {
   }
 
   /// Fetches the current Google user profile (name, email, avatar, etc.)
-  Future<GoogleUserModel> getGoogleUserProfile() async {
+  Future<UserModel> getGoogleUserProfile() async {
     final googleSession = await _account.getSession(sessionId: "current");
 
     final accessToken = googleSession.providerAccessToken;
@@ -92,7 +129,7 @@ class AppwriteService {
 
     if (res.statusCode == 200) {
       final data = jsonDecode(res.body);
-      return GoogleUserModel.fromJson(data);
+      return UserModel.fromJson(data);
     } else {
       throw Exception("Failed to fetch Google user profile: ${res.body}");
     }

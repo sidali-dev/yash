@@ -12,17 +12,17 @@ class UserCacheService {
   static const String _profileKey = 'google_user';
 
   /// Get cached user profile
-  Future<GoogleUserModel?> getUserProfile() async {
-    final user = _box.read<Map<String, dynamic>>(_profileKey);
+  Future<UserModel?> getUserProfile(String userId) async {
+    final user = _box.read<Map<String, dynamic>>("$_profileKey-$userId");
     if (user != null) {
-      return GoogleUserModel.fromJson(user);
+      return UserModel.fromJson(user);
     }
     return null;
   }
 
   /// Save user profile to cache
-  Future<void> setUserProfile(GoogleUserModel profile) async {
-    await _box.write(_profileKey, profile.toJson());
+  Future<void> setUserProfile(UserModel profile) async {
+    await _box.write("$_profileKey-${profile.id}", profile.toJson());
   }
 
   /// Clear cached profile (and avatar)

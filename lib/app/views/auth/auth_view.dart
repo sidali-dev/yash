@@ -31,7 +31,7 @@ class AuthView extends GetView<AuthController> {
                     bottom: Radius.circular(48),
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 100),
+                padding: const EdgeInsets.symmetric(vertical: 80),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -47,7 +47,7 @@ class AuthView extends GetView<AuthController> {
                 ),
               ),
               Transform.translate(
-                offset: const Offset(0, -72),
+                offset: const Offset(0, -56),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32.0),
                   child: AuthCard(s: s),

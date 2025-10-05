@@ -7,7 +7,7 @@ import 'package:yash/app/services/user_cache_service.dart';
 
 class UserController extends GetxController {
   late Rx<User?> user;
-  late Rx<GoogleUserModel> googleUser;
+  late Rx<UserModel> googleUser;
 
   final Rx<Uint8List?> _image = Rx<Uint8List?>(null);
   Uint8List? get image => _image.value;
@@ -16,19 +16,24 @@ class UserController extends GetxController {
     this.user = user.obs;
   }
 
-  Future initGoogleUser(GoogleUserModel googleUser) async {
+  Future initGoogleUser(UserModel googleUser) async {
     this.googleUser = googleUser.obs;
+
     await displayImage();
   }
 
   Future<Uint8List?> displayImage() async {
+    if (googleUser.value.picture == null) {
+      return null;
+    }
+
     if (_image.value != null) {
       return _image.value;
     }
 
     UserCacheService cacheService = UserCacheService();
 
-    _image.value = await cacheService.getUserAvatar(googleUser.value.picture);
+    _image.value = await cacheService.getUserAvatar(googleUser.value.picture!);
 
     return _image.value!;
   }

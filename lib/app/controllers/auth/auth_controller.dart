@@ -27,6 +27,64 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> signUp({
+    required String email,
+    required String password,
+    required String name,
+  }) async {
+    try {
+      isLoading.value = true;
+      await _appwriteService.createAccount(
+        email: email,
+        password: password,
+        name: name,
+      );
+
+      await signIn(email: email, password: password, newUser: true);
+    } catch (e) {
+      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> signIn({
+    required String email,
+    required String password,
+    required bool newUser,
+  }) async {
+    try {
+      isLoading.value = true;
+      await _appwriteService.login(email: email, password: password);
+
+      if (newUser) {
+        try {
+          await _appwriteService.createUserLibrary();
+          await Future.delayed(Duration(milliseconds: 500));
+        } catch (_) {}
+      }
+
+      isLoggedIn.value = true;
+
+      UserController userController = Get.find();
+      userController.initUser(_appwriteService.currentUser!);
+      await userController.initGoogleUser(
+        UserModel(
+          id: _appwriteService.currentUser!.$id,
+          email: _appwriteService.currentUser!.email,
+          name: _appwriteService.currentUser!.name,
+          picture: null,
+        ),
+      );
+
+      Get.offAllNamed(Routes.NAVIGATION);
+    } catch (e) {
+      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> signInWithGoogle() async {
     try {
       isLoading.value = true;
@@ -45,7 +103,7 @@ class AuthController extends GetxController {
 
       UserCacheService cacheService = UserCacheService();
       cacheService.setUserProfile(response);
-      cacheService.setAvatarFromUrl(response.picture);
+      cacheService.setAvatarFromUrl(response.picture!);
 
       await userController.initGoogleUser(response);
 
@@ -87,10 +145,19 @@ class AuthController extends GetxController {
     UserController userController = Get.find();
 
     UserCacheService cacheService = UserCacheService();
-    GoogleUserModel? googleUserModel = await cacheService.getUserProfile();
+    UserModel? googleUserModel = await cacheService.getUserProfile(
+      userController.user.value!.$id,
+    );
 
     if (googleUserModel == null) {
-      return false;
+      googleUserModel = UserModel(
+        id: userController.user.value!.$id,
+        email: userController.user.value!.email,
+        name: userController.user.value!.name,
+        picture: null,
+      );
+
+      cacheService.setUserProfile(googleUserModel);
     }
 
     try {
