@@ -6,12 +6,12 @@ A modern and secure **Flutter** app built with **GetX** and **Appwrite**, design
 
 <div align="center">
   <img src="assets/preview/Preview.png" width="200" alt="Spalsh Screen"/>
-  <img src="assets/preview/Preview1.png" width="200" alt="Spalsh Screen"/>
-  <img src="assets/preview/Preview2.png" width="200" alt="Store Screen"/>
-  <img src="assets/preview/Preview3.png" width="200" alt="Book Details Screen"/>
-  <img src="assets/preview/Preview4.png" width="200" alt="Cart Screen"/>
-  <img src="assets/preview/Preview6.png" width="200" alt="Bookshelf Screen"/>
-  <img src="assets/preview/Preview5.png" width="200" alt="Settings Screen"/>
+  <img src="assets/preview/Preview-1.png" width="200" alt="Spalsh Screen"/>
+  <img src="assets/preview/Preview-2.png" width="200" alt="Store Screen"/>
+  <img src="assets/preview/Preview-3.png" width="200" alt="Book Details Screen"/>
+  <img src="assets/preview/Preview-4.png" width="200" alt="Cart Screen"/>
+  <img src="assets/preview/Preview-6.png" width="200" alt="Bookshelf Screen"/>
+  <img src="assets/preview/Preview-5.png" width="200" alt="Settings Screen"/>
 </div>
 
 ## ✨ Features
